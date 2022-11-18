@@ -6,12 +6,47 @@ export interface SpecRealtimeClientOptions {
     host?: string
     port?: number
     database?: string
+    minPoolConnections?: number
+    maxPoolConnections?: number
     channel?: string
     bufferInterval?: number
     maxBufferSize?: number
+    onError?: (error: Error) => void
 }
 
-// export type EventCallback =
-//     | ((event: SpecEvent<StringKeyMap | StringKeyMap[]>) => void)
-//     | ((events: SpecEvent<StringKeyMap | StringKeyMap[]>[]) => void)
-//     | ((data: any) => void)
+export interface TableOptions {
+    schema?: string
+    bufferInterval?: number
+    maxBufferSize?: number
+    onError?: (error: Error) => void
+}
+
+export enum Operation {
+    INSERT = 'INSERT',
+    UPDATE = 'UPDATE',
+    DELETE = 'DELETE',
+    ALL = '*',
+}
+
+export type TableOperationSubs = { [key: string]: EventCallback }
+
+export interface PendingEvent {
+    timestamp: string
+    operation: Operation
+    schema: string
+    table: string
+    data?: StringKeyMap
+    primaryKeyData?: StringKeyMap
+    columnNamesChanged?: string[]
+}
+
+export interface Event {
+    timestamp: string
+    operation: Operation
+    schema: string
+    table: string
+    data: StringKeyMap
+    columnNamesChanged?: string[]
+}
+
+export type EventCallback = (event: Event | Event[]) => void
