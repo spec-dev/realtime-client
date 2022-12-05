@@ -103,7 +103,7 @@ export default class SpecRealtimeClient {
         })
 
         // Register event handler.
-        subscriber.notifications.on(this.channel, (event) => this._onEvent(event))
+        subscriber.notifications.on(this.channel, (event) => event && this._onEvent(event))
 
         return subscriber
     }
